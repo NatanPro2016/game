@@ -8,6 +8,7 @@ const Home = () => {
     img: string;
     id: number;
   }
+  const [imgLoading, setImgLoading] = useState<boolean>(true);
   const [cards, setCards] = useState<file[]>([]);
   const [fliped, setfliped] = useState<number[]>([]);
   const [gameOver, setGameover] = useState<boolean>(false);
@@ -130,29 +131,34 @@ const Home = () => {
           </>
         )}
 
-        {!(!gameStarted || win || gameOver) && (
-          <div className=" grid grid-cols-3 gap-3  rounded-lg p-1">
-            {cards.map((card, index: number) => (
-              <div className="container shadow rounded-lg" key={index}>
-                <div
-                  className={`card ${fliped.includes(index) && "active"}`}
-                  id="code"
-                  onClick={() => handleFlip(index)}
-                >
-                  <div className="front"></div>
-                  <div className="back">
-                    <img
-                      src={card.img}
-                      alt=""
-                      className="h-100 w-100 object-cover rounded"
-                    />
-                  </div>
+        <div
+          className={` grid-cols-3 gap-3  rounded-lg p-1 ${
+            !gameStarted || win || gameOver ? "hidden" : "grid"
+          }`}
+        >
+          {cards.map((card, index: number) => (
+            <div className="container shadow rounded-lg" key={index}>
+              <div
+                className={`card ${fliped.includes(index) && "active"}`}
+                id="code"
+                onClick={() => handleFlip(index)}
+              >
+                <div className="front"></div>
+                <div className="back">
+                  <img
+                    src={card.img}
+                    alt=""
+                    className="h-100 w-100 object-cover rounded"
+                    onLoad={() => setImgLoading(false)}
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-        {(!gameStarted || win) && (
+            </div>
+          ))}
+        </div>
+
+        {imgLoading && <div className="loader"></div>}
+        {(!gameStarted || win) && !imgLoading && (
           <button
             onClick={handleGameStart}
             className="py-1 px-6 rounded-lg font-bold bg-slate-500"
