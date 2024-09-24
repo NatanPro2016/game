@@ -7,7 +7,7 @@
   padding: 0;
   box-sizing: border-box;
 }
-/* HTML: <div class="loader"></div> */
+
 .loader {
   width: fit-content;
   font-size: 17px;
@@ -36,6 +36,7 @@
   bottom: 100%;
   animation: l8-1 3s infinite linear;
 }
+
 @keyframes l8-0 {
   0%,
   12.5% {
@@ -101,8 +102,6 @@
   transition-delay: 3s;
   transition: transform 1500ms;
   transform-style: preserve-3d;
-}
-.animate-in {
 }
 
 .card {

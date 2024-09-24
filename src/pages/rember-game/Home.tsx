@@ -74,6 +74,7 @@ const Home = () => {
   };
 
   const handleGameStart = () => {
+    shuffleCards();
     showCards();
     setGamestarted(true);
     setGameover(false);
@@ -103,15 +104,15 @@ const Home = () => {
   }, [fliped]);
 
   return (
-    <div className="bg-[url('/background.jpg')] bg-cover min-h-screen flex flex-col justify-center items-center text-white  ">
+    <div className="bg-[url('/background.jpg')] bg-center-top bg-cover min-h-screen  home flex flex-col justify-center items-center text-white  ">
       {!gameOver && !win && (
-        <div className="flex gap-2 m-2">
+        <div className="flex gap-2 m-2 ">
           {hearts.map((heart) => (
             <img src="/heart.png" alt="" className="w-4" key={heart} />
           ))}
         </div>
       )}
-      <div className="backdrop-blur shadow bg-[#ffffff09] border border-[#f0e4e418] flex flex-col items-center p-4 gap-4  rounded-lg">
+      <div className="backdrop-blur shadow  relative border z-10 border-[#f0e4e418] flex flex-col items-center p-4 gap-4  rounded-lg">
         {win && !gameOver && <WinPage score={incorrectTries} />}
         {gameOver && <GameOver score={fliped.length} />}
         {!gameStarted && !win && !gameOver && (
@@ -123,10 +124,10 @@ const Home = () => {
               when you click play cards will apper and show the front face for 3
               second and face the other way they you will choose the same cards
               if you get correct same cards you win and get rewarded for you
-              effort
+              effort simply remembering game
               <br />
               <br />
-              you got three lifes
+              you got three lifes indecated by those hearts
             </p>
           </>
         )}
@@ -137,7 +138,7 @@ const Home = () => {
           }`}
         >
           {cards.map((card, index: number) => (
-            <div className="container shadow rounded-lg" key={index}>
+            <div className="container rounded-lg" key={index}>
               <div
                 className={`card ${fliped.includes(index) && "active"}`}
                 id="code"
