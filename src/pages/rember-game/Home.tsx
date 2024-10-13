@@ -8,7 +8,7 @@ const Home = () => {
     img: string;
     id: number;
   }
-  const [imgLoading, setImgLoading] = useState<boolean>(true);
+  const [pageLoading, setPageLoading] = useState<boolean>(true);
   const [cards, setCards] = useState<file[]>([]);
   const [fliped, setfliped] = useState<number[]>([]);
   const [gameOver, setGameover] = useState<boolean>(false);
@@ -102,6 +102,37 @@ const Home = () => {
       shuffleCards();
     }
   }, [fliped]);
+  useEffect(() => {
+    const handleImagesLoad = () => {
+      // Select all images in the document
+      const images = Array.from(document.images);
+      const promises = images.map((image) => {
+        // If the image is already loaded, resolve immediately
+        if (image.complete) return Promise.resolve();
+
+        // Otherwise, create a promise that resolves when the image loads
+        return new Promise<void>((resolve) => {
+          image.onload = () => resolve();
+          image.onerror = () => resolve(); // resolve even if there's an error
+        });
+      });
+
+      // Wait for all images to load
+      Promise.all(promises).then(() => {
+        setPageLoading(false);
+      });
+    };
+
+    // Use `document.readyState` for checking if images are already loaded
+    if (document.readyState === "complete") {
+      handleImagesLoad();
+    } else {
+      window.addEventListener("load", handleImagesLoad);
+    }
+
+    // Clean up the event listener
+    return () => window.removeEventListener("load", handleImagesLoad);
+  }, []);
 
   return (
     <div className="bg-[url('/background.jpg')] bg-center-top bg-cover min-h-screen  home flex flex-col justify-center items-center text-white  ">
@@ -150,7 +181,6 @@ const Home = () => {
                     src={card.img}
                     alt=""
                     className="h-100 w-100 object-cover rounded"
-                    onLoad={() => setImgLoading(false)}
                   />
                 </div>
               </div>
@@ -158,8 +188,8 @@ const Home = () => {
           ))}
         </div>
 
-        {imgLoading && <div className="loader"></div>}
-        {(!gameStarted || win) && !imgLoading && (
+        {pageLoading && <div className="loader"></div>}
+        {(!gameStarted || win) && !pageLoading && (
           <button
             onClick={handleGameStart}
             className="py-1 px-6 rounded-lg font-bold bg-slate-500"
